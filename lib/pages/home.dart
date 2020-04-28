@@ -12,6 +12,10 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:sssocial/pages/img.dart';
+import 'package:sssocial/pages/url.dart';
+
+import 'msg.dart';
 
 final storage = new FlutterSecureStorage();
 String auth="https://backend.scrapshut.com/a/google/";
@@ -28,7 +32,7 @@ _HomeState createState() =>  _HomeState();
 // }
 
 class _HomeState extends State<Home>{
-bool isAuth =false;
+bool isAuth =true;
 String token ='';
 String value='';
 String gtoken='';
@@ -113,11 +117,78 @@ logout(){
 
     
 }
-Widget buildAuthScreen(){
-return RaisedButton(
-  child: Text("Logout") ,
-  onPressed: logout
-); 
+Scaffold buildAuthScreen(){
+return Scaffold(
+  body: Container(
+    height: MediaQuery.of(context).size.height,
+    width: double.infinity,
+    child: DefaultTabController(
+      child: Scaffold(
+         appBar: AppBar(
+                  elevation: 0.0,
+                  backgroundColor: Colors.blue[100],
+                  bottom: PreferredSize(
+                    preferredSize: Size.fromHeight(25),
+                    child: Container(
+                      color: Colors.transparent,
+                      child: SafeArea(
+                        child: Column(
+                          children: <Widget>[
+                            TabBar(
+                                indicator: UnderlineTabIndicator(
+                                    borderSide: BorderSide(
+                                        color: Colors.red
+                                        , width: 6.0),
+                                    insets: EdgeInsets.fromLTRB(
+                                        40.0, 20.0, 40.0, 0)),
+                                indicatorWeight: 15,
+                                indicatorSize: TabBarIndicatorSize.label,
+                                labelColor: Colors.white,
+                                labelStyle: TextStyle(
+                                    fontSize: 12,
+                                   
+                                    fontWeight: FontWeight.bold),
+                                unselectedLabelColor: Colors.white,
+                                tabs: [
+                                  Tab(
+                                    text: "URL",
+                                    
+                                  ),
+                                  Tab(
+                                    text: "MESSAGE",
+                                   
+                                  ),
+                                  Tab(
+                                    text: "IMAGE",
+                                  
+                                  ),
+                                ])
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  
+                ),
+                  body: TabBarView(
+                  children: <Widget>[
+                    URL(),
+                    Msg(),  
+                    Img(),
+                    
+                  ],
+                )
+                ), 
+                length: 3,
+                )
+                )
+                
+      );
+      
+      
+  
+  
+
 }
  Scaffold buildUnAuthScreen(){
  return Scaffold(
