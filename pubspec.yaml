@@ -47,6 +47,7 @@ dev_dependencies:
 flutter:
   assets:     
     - assets/images/download.png
+    - assets/images/scrap_withoutbg.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

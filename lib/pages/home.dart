@@ -32,7 +32,7 @@ _HomeState createState() =>  _HomeState();
 // }
 
 class _HomeState extends State<Home>{
-bool isAuth =true;
+bool isAuth =false;
 String token ='';
 String value='';
 String gtoken='';
@@ -169,6 +169,9 @@ return Scaffold(
                     ),
                   ),
                   
+                ),
+                drawer: Drawer(
+                  child:Text("test")
                 ),
                   body: TabBarView(
                   children: <Widget>[

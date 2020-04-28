@@ -17,12 +17,25 @@ class _ImgState extends State<Img> {
   Dio dio = new Dio();
   @override
   Widget build(BuildContext context) {
+    // AssetImage assetImage =AssetImage("assets/images/scrap_withoutbg.png");
+    // Image image=Image(image:assetImage,width: 150,height: 220,);
+    // return Container(child :image);
     return Scaffold(
+// body :<Widget>[]
       body: Center(
+        // child:Container(
+    // children: <Widget>[
+        // Image.asset(
+        //   'assets/profile.png', width: 100.0, height: 100.0,
+        // ),
+        // ),
+      
         child: RaisedButton(
+          
           color: Colors.red,
           child: Container(
-            
+           
+                
             child: Text("SELECT IMAGE",style: TextStyle(color: Colors.white)),
           ),
           onPressed: ()async

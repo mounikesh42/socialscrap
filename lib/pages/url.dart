@@ -4,10 +4,13 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart';
+  import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 class URL extends StatefulWidget {
   @override
   _URLState createState() => _URLState();
 }
+final storage = new FlutterSecureStorage();
 
 class _URLState extends State<URL> {
   TextEditingController _url;
@@ -23,11 +26,16 @@ class _URLState extends State<URL> {
     // TODO: implement initState
     super.initState();
   }
+
+
   _makePostReq(String urlC,List<String> tags,int rating,String review) async
   {
+    String bvalue = await storage.read(key: 'btoken');
+
   String url = 'https://backend.scrapshut.com/api/post/';
-  Map<String, String> headers = {"Authorization":"JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMywidXNlcm5hbWUiOiJteGlvbmhhY2tpbmciLCJleHAiOjE1ODgyMDEyOTksImVtYWlsIjoibXhpb25oYWNraW5nQGdtYWlsLmNvbSJ9.PfdjRrn2who64Es02d7flVLSF4Hp31u9Sw2NigVtlH8",
+  Map<String, String> headers = {"Authorization":"JWT $bvalue",
           "Content-Type":"application/json"};
+          print(headers);
   String json = jsonEncode({
 			"rate": rating,
             "content": "content",
@@ -67,12 +75,20 @@ class _URLState extends State<URL> {
            
             children: <Widget>[
               Container(
-                height: 150,
+                height: 220,
                 width: 150,
+                 decoration: new BoxDecoration(
+        image: DecorationImage(
+          image: new AssetImage(
+              'assets/images/scrap_withoutbg.png'),
+          fit: BoxFit.fill,
+        ),
+        shape: BoxShape.rectangle,
+      ),
                
               ),
-              Text("Want to browse all review and ratings wait for",style: TextStyle(color: Colors.red),),
-              Text("socialScrap V1.0",style: TextStyle(color: Colors.red)),
+              Text("The More data you give = the more data you get",style: TextStyle(color: Colors.red),),
+              Text("developers.scrapshut.com",style: TextStyle(color: Colors.red)),
               SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -183,7 +199,7 @@ class _URLState extends State<URL> {
                         textAlign: TextAlign.center,
                               decoration: InputDecoration(
                               
-                                hintText: 'Add a tag',
+                                hintText: 'Use , to seperate tags ',
 
                                 hintStyle: TextStyle(color: Colors.grey,),
                                 focusedBorder: OutlineInputBorder(
