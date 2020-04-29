@@ -47,7 +47,7 @@ _showSnackBar(int stauscode) {
         String bvalue = await storage.read(key: 'btoken');
 
   String url = 'https://backend.scrapshut.com/api/msg/';
-  Map<String, String> headers = {"Authorization":"JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMywidXNlcm5hbWUiOiJteGlvbmhhY2tpbmciLCJleHAiOjE1ODgyMDEyOTksImVtYWlsIjoibXhpb25oYWNraW5nQGdtYWlsLmNvbSJ9.PfdjRrn2who64Es02d7flVLSF4Hp31u9Sw2NigVtlH8",
+  Map<String, String> headers = {"Authorization":"JWT ${bvalue}",
 "Content-Type":"application/json"};
   String json = jsonEncode({
 			"rate": rating,
