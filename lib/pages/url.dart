@@ -13,6 +13,7 @@ class URL extends StatefulWidget {
 final storage = new FlutterSecureStorage();
 
 class _URLState extends State<URL> {
+    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   TextEditingController _url;
   TextEditingController _review;
   TextEditingController _tags;
@@ -26,15 +27,30 @@ class _URLState extends State<URL> {
     // TODO: implement initState
     super.initState();
   }
+  
 
-
+_showSnackBar(int stauscode) {
+    print("Show Snackbar here !");
+    final snackBar = new SnackBar(
+        content: stauscode == 201 ? new Text("Succesful") : new Text("There is some error"),
+        duration: new Duration(seconds: 3),
+        backgroundColor: Colors.black,
+        action: new SnackBarAction(label: stauscode == 201 ? 'Ok' : "Try Again",textColor: Colors.white, onPressed: (){
+         _review.clear();_tags.clear();_url.clear();ratings=0;
+        }),
+    );
+    //How to display Snackbar ?
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
   _makePostReq(String urlC,List<String> tags,int rating,String review) async
   {
     String bvalue = await storage.read(key: 'btoken');
 
   String url = 'https://backend.scrapshut.com/api/post/';
-  Map<String, String> headers = {"Authorization":"JWT $bvalue",
-          "Content-Type":"application/json"};
+  // Map<String, String> headers = {"Authorization":"JWT $bvalue",
+  //         "Content-Type":"application/json"};
+  Map<String, String> headers = {"Authorization":"JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMywidXNlcm5hbWUiOiJteGlvbmhhY2tpbmciLCJleHAiOjE1ODgyMDEyOTksImVtYWlsIjoibXhpb25oYWNraW5nQGdtYWlsLmNvbSJ9.PfdjRrn2who64Es02d7flVLSF4Hp31u9Sw2NigVtlH8",
+"Content-Type":"application/json"};
           print(headers);
   String json = jsonEncode({
 			"rate": rating,
@@ -51,23 +67,15 @@ class _URLState extends State<URL> {
   print(response.body);
    int statusCode = response.statusCode;
    
-   if(statusCode == 200)
-   {
-     print("ok");
       print("statusCode");
      print(statusCode);
-   }
-   else
-   {
-     //print("Error");
-      print("statusCode");
-     print(statusCode);
-   }
+     _showSnackBar(statusCode);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: ListView(
       padding: EdgeInsets.all(8),
           
@@ -99,8 +107,8 @@ class _URLState extends State<URL> {
                     child: Container(
                       height: 45,
                       width: 250,
-                      child: TextField(
-                        
+                      child: TextFormField(
+                        keyboardType: TextInputType.url,
                         controller: _url,
                         textAlign: TextAlign.center,
                               decoration: InputDecoration(
@@ -132,6 +140,7 @@ class _URLState extends State<URL> {
                    Padding(
                      padding: const EdgeInsets.all(8.0),
                      child: RatingBar(
+                    
    initialRating: 0,
    minRating: 1,
    direction: Axis.horizontal,

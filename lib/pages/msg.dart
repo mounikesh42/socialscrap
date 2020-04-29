@@ -14,6 +14,7 @@ class Msg extends StatefulWidget {
 final storage = new FlutterSecureStorage();
 
 class _MsgState extends State<Msg> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   TextEditingController _message;
   TextEditingController _review;
   TextEditingController _tags;
@@ -27,13 +28,27 @@ void initState() {
     // TODO: implement initState
     super.initState();
   }  
+  
+_showSnackBar(int stauscode) {
+    print("Show Snackbar here !");
+    final snackBar = new SnackBar(
+        content: stauscode == 201 ? new Text("Succesful") : new Text("There is some error"),
+        duration: new Duration(seconds: 3),
+        backgroundColor: Colors.black,
+        action: new SnackBarAction(label: stauscode == 201 ? 'Ok' : "Try Again",textColor: Colors.white, onPressed: (){
+         _review.clear();_tags.clear();;ratings=0;
+        }),
+    );
+    //How to display Snackbar ?
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
   _makePostReq(String content,List<String> tags,int rating,String review) async
   {
         String bvalue = await storage.read(key: 'btoken');
 
   String url = 'https://backend.scrapshut.com/api/msg/';
-  Map<String, String> headers = {"Authorization":"JWT $bvalue",
-          "Content-Type":"application/json"};
+  Map<String, String> headers = {"Authorization":"JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMywidXNlcm5hbWUiOiJteGlvbmhhY2tpbmciLCJleHAiOjE1ODgyMDEyOTksImVtYWlsIjoibXhpb25oYWNraW5nQGdtYWlsLmNvbSJ9.PfdjRrn2who64Es02d7flVLSF4Hp31u9Sw2NigVtlH8",
+"Content-Type":"application/json"};
   String json = jsonEncode({
 			"rate": rating,
             "content": content,
@@ -48,23 +63,13 @@ void initState() {
   Response response = await post(url,headers: headers, body: json);
   print(response.body);
    int statusCode = response.statusCode;
-   
-   if(statusCode == 200)
-   {
-     print("ok");
-      print("statusCode");
-     print(statusCode);
-   }
-   else
-   {
-     //print("Error");
-      print("statusCode");
-     print(statusCode);
-   }
+   print(statusCode);
+   _showSnackBar(statusCode);
   }
   // Widget build(BuildContext context) {
     Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: ListView(
       padding: EdgeInsets.all(8),
           
