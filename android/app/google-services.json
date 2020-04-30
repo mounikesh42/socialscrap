@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:18150117603:android:19c3e4d405734eee6d75d6",
+        "mobilesdk_app_id": "1:18150117603:android:55cfb32b35565fe46d75d6",
         "android_client_info": {
-          "package_name": "com.socialscrap.com"
+          "package_name": "com.scrapsocial.scrap"
         }
       },
       "oauth_client": [
         {
-          "client_id": "18150117603-8307ssdmqdts9ocqsvdp7q5ujf85sdmb.apps.googleusercontent.com",
+          "client_id": "18150117603-un89g92opd4g9diha4url96jmlrcov04.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.socialscrap.com",
-            "certificate_hash": "19084d21bb5400a4a3e3d22b1a2df5cf25821012"
+            "package_name": "com.scrapsocial.scrap",
+            "certificate_hash": "67d4604ca2594bb4a7d78b418e5b6b8dc0d9279a"
           }
         },
         {

@@ -171,7 +171,33 @@ return Scaffold(
                   
                 ),
                 drawer: Drawer(
-                  child:Text("test")
+                 child: ListView(
+    // Important: Remove any padding from the ListView.
+    padding: EdgeInsets.zero,
+    children: <Widget>[
+      DrawerHeader(
+        child: Text('Scrashut For Deeptech'),
+        decoration: BoxDecoration(
+          color: Colors.blue,
+        ),
+      ),
+      ListTile(
+        title: Text('Logout'),
+        onTap: () {
+          logout();
+          // Update the state of the app.
+          // ...
+        },
+      ),
+      // ListTile(
+      //   title: Text('Item 2'),
+      //   onTap: () {
+      //     // Update the state of the app.
+      //     // ...
+      //   },
+      // ),
+    ],
+  ),
                 ),
                   body: TabBarView(
                   children: <Widget>[
@@ -200,8 +226,8 @@ body: Container(
     gradient: LinearGradient(
       begin:Alignment.topRight,
       end:Alignment.bottomLeft, colors: <Color>[
-        Colors.teal,
-        Colors.purple,
+        Colors.blue,
+        Colors.white,
       ],
         ),
   ),
@@ -211,12 +237,25 @@ alignment: Alignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
 
     children: <Widget>[
-    Text("Scrapshut",style:TextStyle(
-      fontFamily:"Signatra",
-       fontSize:40.0,
-       color:Colors.lightBlue,
-       ),
-       ),
+            Container(
+                height:300,
+                width: 800,
+                 decoration: new BoxDecoration(
+        image: DecorationImage(
+          image: new AssetImage(
+              'assets/images/scrap_withoutbg.png'),
+          fit: BoxFit.fill,
+        ),
+        shape: BoxShape.rectangle,
+      ),
+               
+              ),
+    // Text("Scrapshut",style:TextStyle(
+    //   fontFamily:"Signatra",
+    //    fontSize:40.0,
+    //    color:Colors.lightBlue,
+    //    ),
+    //    ),
        GestureDetector(
          onTap: login(),
          child: Container(
