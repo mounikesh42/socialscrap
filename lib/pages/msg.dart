@@ -276,7 +276,10 @@ _showSnackBar(int stauscode) {
                   _review.text.isEmpty ? _validateR = true : _validateR = false;
                   _tags.text.isEmpty ? _validateT = true : _validateT = false;
                 });
+                 if(!_validateR&&_validateU&&_validateT)
+                 {
                     _makePostReq(_message.text, _tags.text.toString().split(",").toList(),ratings, _review.text);
+                 }
                   },
                 ),
               )
