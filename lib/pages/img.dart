@@ -7,11 +7,13 @@ import 'package:mime/mime.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Img extends StatefulWidget {
   @override
   _ImgState createState() => _ImgState();
 }
+final storage = new FlutterSecureStorage();
 
 class _ImgState extends State<Img> {
   Dio dio = new Dio();
@@ -124,7 +126,7 @@ class _ImgState extends State<Img> {
   
               
   
-              color: Colors.red,
+              color: Colors.blue,
   
            
   
@@ -161,12 +163,18 @@ class _ImgState extends State<Img> {
                   });
   
                   String url = "https://backend.scrapshut.com/api/img/";
+                      String bvalue = await storage.read(key: 'btoken');
+
+                  Dio dio = new Dio();
+dio.options.headers['content-Type'] = 'application/json';
+dio.options.headers["Authorization"] = "JWT ${bvalue}";
+Response response = await dio.post(url, data: formData);
   
-                   Map<String, String> headers = {"Authorization":"JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMywidXNlcm5hbWUiOiJteGlvbmhhY2tpbmciLCJleHAiOjE1ODgyMDEyOTksImVtYWlsIjoibXhpb25oYWNraW5nQGdtYWlsLmNvbSJ9.PfdjRrn2who64Es02d7flVLSF4Hp31u9Sw2NigVtlH8",
+                  //  Map<String, String> headers = {"Authorization":"JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMywidXNlcm5hbWUiOiJteGlvbmhhY2tpbmciLCJleHAiOjE1ODgyMDEyOTksImVtYWlsIjoibXhpb25oYWNraW5nQGdtYWlsLmNvbSJ9.PfdjRrn2who64Es02d7flVLSF4Hp31u9Sw2NigVtlH8",
   
-              "Content-Type":"application/json"};
+              // "Content-Type":"application/json"};
   
-              Response response = await dio.post(url,data: formData,options: Options(headers: headers));
+              // Response response = await dio.post(url,data: formData,options: Options(headers: headers));
   
           
   
