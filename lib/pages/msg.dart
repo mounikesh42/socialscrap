@@ -19,6 +19,10 @@ class _MsgState extends State<Msg> {
   TextEditingController _review;
   TextEditingController _tags;
   int ratings;
+   bool _validateU = false;
+   bool _validateR = false;
+    bool _validateT = false;
+  
   @override
 void initState() {
     _message = TextEditingController();
@@ -64,7 +68,42 @@ _showSnackBar(int stauscode) {
   print(response.body);
    int statusCode = response.statusCode;
    print(statusCode);
-   _showSnackBar(statusCode);
+    if(statusCode == 200)
+   {
+       print("statusCode");
+     print(statusCode);
+     _showSnackBar(statusCode);
+
+   }
+   else if(statusCode == 401)
+   {
+     final snackBar = new SnackBar(
+        content: Text("Unauthorized access"),
+        duration: new Duration(seconds: 3),
+        backgroundColor: Colors.black,
+        action: new SnackBarAction(label: "LogOut",textColor: Colors.white, onPressed: (){
+              
+        }),
+    );
+    //How to display Snackbar ?
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+
+   }
+     else if(statusCode == 500)
+   {
+     final snackBar = new SnackBar(
+        content: Text("Server error please contact team@scrapshut.com"),
+        duration: new Duration(seconds: 3),
+        backgroundColor: Colors.black,
+        action: new SnackBarAction(label: "Ok",textColor: Colors.white, onPressed: (){
+          _review.clear();_tags.clear(); _message.clear() ;ratings=0;
+              
+        }),
+    );
+    //How to display Snackbar ?
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+
+   }
   }
   // Widget build(BuildContext context) {
     Widget build(BuildContext context) {
@@ -108,6 +147,7 @@ _showSnackBar(int stauscode) {
                               decoration: InputDecoration(
                             
                                 hintText: 'Message',
+                                 errorText: _validateU ? 'Value Can\'t Be Empty' : null,
 
                                 hintStyle: TextStyle(color: Colors.grey,),
                                 focusedBorder: OutlineInputBorder(
@@ -168,6 +208,7 @@ _showSnackBar(int stauscode) {
                               decoration: InputDecoration(
                               
                                 hintText: "Review helps others identify false comments",
+                                 errorText: _validateR ? 'Value Can\'t Be Empty' : null,
 
                                 hintStyle: TextStyle(color: Colors.grey,fontSize: 10),
                                 focusedBorder: OutlineInputBorder(
@@ -202,6 +243,7 @@ _showSnackBar(int stauscode) {
                               decoration: InputDecoration(
                               
                                 hintText: 'Use , to seperate tags ',
+                                 errorText: _validateT ? 'Value Can\'t Be Empty' : null,
 
                                 hintStyle: TextStyle(color: Colors.grey,),
                                 focusedBorder: OutlineInputBorder(
@@ -229,7 +271,15 @@ _showSnackBar(int stauscode) {
                   color: Colors.blue,
                   child: Text("Submit",style: TextStyle(color: Colors.white),),
                   onPressed: ()  {
+                     setState(() {
+                  _message.text.isEmpty ? _validateU = true : _validateU = false;
+                  _review.text.isEmpty ? _validateR = true : _validateR = false;
+                  _tags.text.isEmpty ? _validateT = true : _validateT = false;
+                });
+                 if(!_validateR&&_validateU&&_validateT)
+                 {
                     _makePostReq(_message.text, _tags.text.toString().split(",").toList(),ratings, _review.text);
+                 }
                   },
                 ),
               )

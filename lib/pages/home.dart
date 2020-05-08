@@ -32,7 +32,7 @@ _HomeState createState() =>  _HomeState();
 // }
 
 class _HomeState extends State<Home>{
-bool isAuth =false;
+bool isAuth =true;
 String token ='';
 String value='';
 String gtoken='';
@@ -108,7 +108,7 @@ else{
           });
   });
 }
-logout(){
+ logout(){
     googlesignin.signOut();
 
    storage.delete(key: 'btoken');

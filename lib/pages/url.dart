@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart';
-  import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import  '../pages/home.dart';
 
 class URL extends StatefulWidget {
   @override
@@ -18,15 +19,24 @@ class _URLState extends State<URL> {
   TextEditingController _review;
   TextEditingController _tags;
   int ratings;
+  bool _validateU = false;
+   bool _validateR = false;
+    bool _validateT = false;
+  
+
+ Home _home;
   @override
   void initState() {
     _url = TextEditingController();
     _review = TextEditingController();
     _tags = TextEditingController();
+    _home = Home();
+
   
     // TODO: implement initState
     super.initState();
   }
+  
   
 
 _showSnackBar(int stauscode) {
@@ -66,10 +76,44 @@ _showSnackBar(int stauscode) {
   Response response = await post(url,headers: headers, body: json);
   print(response.body);
    int statusCode = response.statusCode;
-   
-      print("statusCode");
+   if(statusCode == 200)
+   {
+       print("statusCode");
      print(statusCode);
      _showSnackBar(statusCode);
+
+   }
+   else if(statusCode == 401)
+   {
+     final snackBar = new SnackBar(
+        content: Text("Unauthorized access"),
+        duration: new Duration(seconds: 3),
+        backgroundColor: Colors.black,
+        action: new SnackBarAction(label: "LogOut",textColor: Colors.white, onPressed: (){
+              
+        }),
+    );
+    //How to display Snackbar ?
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+
+   }
+     else if(statusCode == 500)
+   {
+     final snackBar = new SnackBar(
+        content: Text("Server error please contact team@scrapshut.com"),
+        duration: new Duration(seconds: 3),
+        backgroundColor: Colors.black,
+        action: new SnackBarAction(label: "Ok",textColor: Colors.white, onPressed: (){
+          _review.clear();_tags.clear();_url.clear();ratings=0;
+              
+        }),
+    );
+    //How to display Snackbar ?
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+
+   }
+  
+    
   }
 
   @override
@@ -114,6 +158,7 @@ _showSnackBar(int stauscode) {
                               decoration: InputDecoration(
                             
                                 hintText: 'URL',
+                                errorText: _validateU ? 'Value Can\'t Be Empty' : null,
 
                                 hintStyle: TextStyle(color: Colors.grey,),
                                 focusedBorder: OutlineInputBorder(
@@ -175,6 +220,7 @@ _showSnackBar(int stauscode) {
                               decoration: InputDecoration(
                               
                                 hintText: "Review helps others identify false comments",
+                                errorText: _validateR ? 'Value Can\'t Be Empty' : null,
 
                                 hintStyle: TextStyle(color: Colors.grey,fontSize: 10),
                                 focusedBorder: OutlineInputBorder(
@@ -209,6 +255,7 @@ _showSnackBar(int stauscode) {
                               decoration: InputDecoration(
                               
                                 hintText: 'Use , to seperate tags ',
+                                errorText: _validateT ? 'Value Can\'t Be Empty' : null,
 
                                 hintStyle: TextStyle(color: Colors.grey,),
                                 focusedBorder: OutlineInputBorder(
@@ -236,7 +283,18 @@ _showSnackBar(int stauscode) {
                   color: Colors.blue,
                   child: Text("Submit",style: TextStyle(color: Colors.white),),
                   onPressed: ()  {
-                    _makePostReq(_url.text, _tags.text.toString().split(",").toList(),ratings, _review.text);
+                    setState(() {
+                  _url.text.isEmpty ? _validateU = true : _validateU = false;
+                  _review.text.isEmpty ? _validateR = true : _validateR = false;
+                  _tags.text.isEmpty ? _validateT = true : _validateT = false;
+                });
+                if(!_validateR&&_validateU&&_validateT)
+                {
+                   _makePostReq(_url.text, _tags.text.toString().split(",").toList(),ratings, _review.text);
+                }
+              
+              
+                   
                   },
                 ),
               )
